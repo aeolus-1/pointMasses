@@ -3,25 +3,35 @@ loadScripts([
     "src/world.js",
     "src/renderer.js",
     "src/runner.js",
+
+    "level.js",
+    "chunks.js"
     
 ], ()=>{
+
+    levelDat = JSON.parse(levelDat.start)
+
     mainWorld = new World({
         gravity:{
             ...v(0,1),
             constant:9.81,
             scale:15,
         },
-        frictionAir:0.999,
-        neighbourStrength:10,
-        shapeStrength:10,
+        frictionAir:1,
+        neighbourStrength:100,
+        shapeStrength:100,
     })
+
+    chunkHandler = new ChunkHandler(mainWorld)
+
     runner = new Runner(mainWorld, {
-        timeScale:0.8,
-        updateTime:60,
+        timeScale:0.7,
+        updateTime:120,
     })
     renderer = new Renderer(mainWorld, canvas)
 
     runner.events.beforeRun = ()=>{
+        chunkHandler.runChunks()
         renderer.packetQueue = []
 
         runControls()
@@ -78,8 +88,8 @@ loadScripts([
     runner.run()
     renderer.run()
     var width = 1800
-    var floor = mainWorld.addPointMass([...generateLine(v(-width,200),v(width,200)),...generateLine(v(width,200), v(width,500)),...generateLine(v(width,500), v(-width,500)), ...generateLine(v(-width,500), v(-width,200))], {mass:1000,render:{fill:colorTheme.platforms}})
-    floor.static = true
+    //var floor = mainWorld.addPointMass([...generateLine(v(-width,200),v(width,200)),...generateLine(v(width,200), v(width,500)),...generateLine(v(width,500), v(-width,500)), ...generateLine(v(-width,500), v(-width,200))], {mass:1000,render:{fill:colorTheme.platforms}})
+    //floor.static = true
 
     
     var pPoints = JSON.parse(`[{"x":0,"y":0},{"x":75,"y":0},{"x":100,"y":25},{"x":100,"y":75},{"x":300,"y":50},{"x":350,"y":75},{"x":350,"y":125},{"x":300,"y":200},{"x":100,"y":175},{"x":100,"y":225},{"x":75,"y":250},{"x":25,"y":250},{"x":0,"y":225},{"x":0,"y":175},{"x":50,"y":150},{"x":50,"y":100},{"x":0,"y":75},{"x":0,"y":25}]`)
@@ -88,7 +98,7 @@ loadScripts([
     //window.testMass = mainWorld.addPointMass([v(200,0),v(250,0),v(250,50),v(200,50)],{render:{fill:colorTheme.platforms}})
     //cube.static = true
 
-    function generateLine(a,b,splitLength=33) {
+    function generateLine(a,b,splitLength=100) {
         var dst = getDst(a,b),
             angle = (-getAngle(a,b)+90)*(Math.PI/180)
             subdivsions = Math.floor(dst/splitLength),
@@ -113,7 +123,7 @@ loadScripts([
         var points = [],
             radius = 100,
             segments = 30,
-            startPos = v(1000, -5400)
+            startPos = v(100000, -5400)
 
         for (let i = 0; i < segments; i++) {
             points.push(v(
@@ -176,5 +186,6 @@ loadScripts([
 })
 
 var mainWorld;
+var chunkHandler;
 var runner;
 var renderer;

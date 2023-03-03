@@ -91,7 +91,7 @@ class Point {
                 var staticV = 0.5//(closestLine[0].mass.static^this.mass.static)?1:(!closestLine[0].mass.static&!this.mass.static)?0:0
 
 
-                var diff = clamp(Math.abs(((rotatedLine[0].y+rotatedLine[1].y)/2)-rotatedSelfPos.y), 0, Infinity)
+                var diff = clamp(Math.abs(((rotatedLine[0].y+rotatedLine[1].y)/2)-rotatedSelfPos.y), 0, Infinity)*1.2
 
 
                 rotatedSelfPos.y -= diff*staticV//(rotatedLine[0].y+rotatedLine[1].y)/2
@@ -322,6 +322,8 @@ class PointMass {
             },
             ...options,
         }
+
+        this.unload = false
 
         this.render = this.options.render
 

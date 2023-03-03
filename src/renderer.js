@@ -140,6 +140,9 @@ class Renderer {
                 buffer*gridSize,
             )
 
+        //ctx.lineWidth = 5
+        //ctx.globalAlpha = 0.8
+
         for (let x = -buffer; x < columns+buffer; x++) {
             ctx.beginPath()
 

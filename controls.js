@@ -7,8 +7,8 @@ var mouse = {
     preKeys = {}
 
 document.addEventListener("mousemove", (e)=>{
-    mouse.pos.x = e.offsetX
-    mouse.pos.y = e.offsetY
+    mouse.pos.x = e.offsetX+renderer.camera.pos.x
+    mouse.pos.y = e.offsetY+renderer.camera.pos.y
 })
 document.addEventListener("mousedown", (e)=>{mouse.down=true})
 document.addEventListener("mouseup", (e)=>{mouse.down=false})
